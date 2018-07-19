@@ -1,0 +1,22 @@
+<configuration>
+    <property>
+        <name>hbase.zookeeper.property.clientPort</name>
+        <value>2181</value>
+    </property>
+
+    <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>node3,node2,node1</value>
+    </property>
+
+    <property>
+        <name>hbase.client.scanner.timeout.period</name>
+        <value>600000</value>
+    </property>
+
+    <property>
+        <name>hbase.rpc.timeout</name>
+        <value>180000</value>
+    </property>
+
+</configuration>
