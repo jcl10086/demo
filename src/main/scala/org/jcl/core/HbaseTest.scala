@@ -13,11 +13,11 @@ import org.apache.spark.sql.SparkSession
   * yarn:ccu_data yarn
   */
 object HbaseTest {
-  def main(args: Array[String]): Unit = {
+  def startJob(table:String,master:String): Unit = {
 
-    val table=args(0)
-
-    val master=args(1)
+//    val table=args(0)
+//
+//    val master=args(1)
 
     val spark = SparkSession
       .builder

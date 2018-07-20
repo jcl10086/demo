@@ -10,9 +10,9 @@ import org.apache.spark.sql.SparkSession
   */
 object SparkSqlHive {
 
-  def main(args: Array[String]): Unit = {
+  def startJob(master:String,st:String,et:String): Unit = {
 
-    val master=args(0)
+//    val master=args(0)
 
     val spark = SparkSession
       .builder()
@@ -26,7 +26,7 @@ object SparkSqlHive {
 
     val startTime = System.currentTimeMillis()
 
-    sql("select count(*) from ccu_data where value['createAt'] > '2018-01-01 00:00:00' and value['createAt'] < '2018-01-02 00:00:))'").show()
+    sql("select count(*) from ccu_data where value['createAt'] > "+ st +" and value['createAt'] < "+ et +"").show()
 
     val endTime = System.currentTimeMillis()
     println("action cost time:" + ((endTime - startTime)/1000.0) + "s")

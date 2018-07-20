@@ -6,12 +6,12 @@ import org.apache.spark.sql.SparkSession
   * Created by admin on 2018/7/18.
   */
 object WordCount {
-  def main(args: Array[String]): Unit = {
+  def startJob(master:String): Unit = {
 
     val spark = SparkSession
       .builder
       .appName("Spark SQL basic example")
-      .master("local")
+      .master(master)
       .getOrCreate()
 
     val sc=spark.sparkContext

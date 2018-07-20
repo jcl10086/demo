@@ -112,7 +112,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>org.jcl.core.HbaseSpark</mainClass>
+                            <mainClass>org.jcl.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

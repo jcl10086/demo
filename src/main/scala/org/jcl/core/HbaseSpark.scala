@@ -16,15 +16,15 @@ import scala.collection.mutable.ListBuffer
   */
 object HbaseSpark {
 
-  def main(args: Array[String]): Unit = {
+  def startJob(table:String,master:String,st:String,et:String): Unit = {
 
-    val table=args(0)
-
-    val master=args(1)
-
-    val st=args(2)
-
-    val et=args(3)
+//    val table=args(0)
+//
+//    val master=args(1)
+//
+//    val st=args(2)
+//
+//    val et=args(3)
 
     val cat=initCat(table)
 
