@@ -48,7 +48,7 @@ object HbaseSpark {
 
     val df=withCatalog(cat)
 //    df.persist(StorageLevel.MEMORY_ONLY)
-    df.show()
+//    df.show()
 
 
     val startTime = System.currentTimeMillis()
