@@ -48,7 +48,7 @@ public class Application {
 
         /**
          * 本地: SparkSqlHive local '"2018-01-01 00:00:00"' '"2018-01-02 00:00:00"'
-         * 集群: SparkSqlHive yarn '"2018-01-01 00:00:00" "2018-01-02 00:00:00"'
+         * 集群: SparkSqlHive yarn '"2018-01-01 00:00:00"' '"2018-01-02 00:00:00"'
          */
         if("SparkSqlHive".equals(args[0])){
 
