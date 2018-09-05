@@ -25,7 +25,8 @@ public class DbUtils {
 
     public static Properties getProps() throws Exception{
         Properties props = new Properties();
-        props.load(new FileInputStream("data/config.properties"));
+        //本地 data/config.properties
+        props.load(new FileInputStream("config.properties"));
         return props;
     }
 
