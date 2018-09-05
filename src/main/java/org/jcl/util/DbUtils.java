@@ -8,6 +8,9 @@ import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import redis.clients.jedis.Jedis;
 
+import java.io.FileInputStream;
+import java.util.Properties;
+
 /**
  * @author jichenglu
  * @create 2018-09-05 11:03
@@ -20,6 +23,12 @@ public class DbUtils {
         return jedis;
     }
 
+    public static Properties getProps() throws Exception{
+        Properties props = new Properties();
+        props.load(new FileInputStream("data/config.properties"));
+        return props;
+    }
+
     /**
      * hbase连接
      * @return
@@ -27,13 +36,19 @@ public class DbUtils {
     public static Connection getHbaseConnection(){
         Connection connection=null;
         try {
+            Properties props=getProps();
+            String port=props.get("hbase.zookeeper.property.clientPort").toString();
+            String quorum=props.get("hbase.zookeeper.quorum").toString();
+
             Configuration conf= HBaseConfiguration.create();
-            conf.set("hbase.zookeeper.quorum", "node1");
-            conf.set("hbase.zookeeper.property.clientPort", "2181");
+            conf.set("hbase.zookeeper.quorum", quorum);
+            conf.set("hbase.zookeeper.property.clientPort", port);
             connection= ConnectionFactory.createConnection(conf);
         }catch (Exception e){
             e.printStackTrace();
         }
         return connection;
     }
+
+
 }
