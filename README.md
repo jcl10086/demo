@@ -16,4 +16,4 @@
 
 手动维护便宜量，将偏移量存储在redis里
 
-![image](https://github.com/jcl10086/demo/src/main/resources/redis.png)
+![image](https://github.com/jcl10086/demo/blob/master/src/main/resources/redis.png)
