@@ -2,10 +2,7 @@ package org.jcl;/**
  * Created by admin on 2018/7/20.
  */
 
-import org.jcl.core.HbaseSpark;
-import org.jcl.core.HbaseTest;
-import org.jcl.core.SparkSqlHive;
-import org.jcl.core.WordCount;
+import org.jcl.core.*;
 
 /**
  * @author jichenglu
@@ -71,6 +68,12 @@ public class Application {
             String master=args[1];
 
             WordCount.startJob(master);
+        }
+
+        if("Stream".equals(args[0])){
+            String master=args[1];
+
+            SparkStreamKafka.startJob(master);
         }
     }
 }
