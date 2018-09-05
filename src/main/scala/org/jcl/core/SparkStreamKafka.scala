@@ -1,5 +1,10 @@
 package org.jcl.core
 
+import java.util.Date
+
+import org.apache.hadoop.hbase.TableName
+import org.apache.hadoop.hbase.client.Put
+import org.apache.hadoop.hbase.util.Bytes
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.sql.SparkSession
@@ -10,6 +15,7 @@ import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.jcl.util.DbUtils
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ListBuffer
 
 
 /**
@@ -18,6 +24,8 @@ import scala.collection.JavaConversions._
 object SparkStreamKafka {
 
   val jedis=DbUtils.getJedis
+
+  val conn=DbUtils.getHbaseConnection
 
   def startJob(master:String): Unit ={
 
@@ -75,9 +83,25 @@ object SparkStreamKafka {
 
       //业务处理
       rdd.foreachPartition(recored=>{
+
+        val table=conn.getTable(TableName.valueOf("hello"))
+
+        val puts=ListBuffer[Put]()
+
         recored.foreach(x=>{
+          val rowkey=new Date().getTime.toString
+          val put=new Put(rowkey.getBytes())
+          put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("value"), Bytes.toBytes(x.value()))
+          puts.append(put)
           println("============:"+x.value())
         })
+
+        if(puts.toList.size > 0){
+          table.put(puts.toList)
+        }
+
+        table.close()
+
       })
 
       //偏移量存储redis
