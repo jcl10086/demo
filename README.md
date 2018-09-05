@@ -11,3 +11,9 @@
         <name>hbase.rpc.timeout</name>
         <value>180000</value>
     </property>
+
+2.spark streaming 整合kafka    同通过引入spark-streaming-kafka-0-10_2.11      
+
+手动维护便宜量，将偏移量存储在redis里
+
+![image](https://github.com/jcl10086/demo/src/main/resources/redis.png)

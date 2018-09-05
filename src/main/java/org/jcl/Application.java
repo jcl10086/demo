@@ -70,6 +70,11 @@ public class Application {
             WordCount.startJob(master);
         }
 
+
+        /**
+         * 本地: Stream local
+         * 集群: Stream yarn
+         */
         if("Stream".equals(args[0])){
             String master=args[1];
 
