@@ -18,4 +18,4 @@
 
 ![image](https://github.com/jcl10086/demo/blob/master/src/main/resources/redis.png)
 
-数据批量插入hbase  redis使用Pipeline批量读取数据
+数据批量插入hbase  spark-redis整合优雅的使用redis
