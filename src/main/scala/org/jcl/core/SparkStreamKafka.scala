@@ -117,6 +117,7 @@ object SparkStreamKafka {
         }
 
         table.close()
+        pipeline.close()
 
       })
 

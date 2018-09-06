@@ -17,3 +17,5 @@
 手动维护偏移量，将偏移量存储在redis里
 
 ![image](https://github.com/jcl10086/demo/blob/master/src/main/resources/redis.png)
+
+数据批量插入hbase  redis使用Pipeline批量读取数据
