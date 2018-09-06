@@ -25,6 +25,8 @@ object SparkStreamKafka {
 
   val jedis=DbUtils.getJedis
 
+  val pipeline=DbUtils.getPipeline
+
   val conn=DbUtils.getHbaseConnection
 
   def startJob(master:String): Unit ={
@@ -81,6 +83,8 @@ object SparkStreamKafka {
       //获取当前偏移量
       val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
 
+      val keys=jedis.keys("imei:*")
+
       //业务处理
       rdd.foreachPartition(recored=>{
 
@@ -88,13 +92,25 @@ object SparkStreamKafka {
 
         val puts=ListBuffer[Put]()
 
+        val responses =keys.map(x=>{
+          (x,pipeline.hgetAll(x))
+        }).toMap
+
+        // 一次性发给redis-server
+        pipeline.sync()
+
         recored.foreach(x=>{
           val rowkey=new Date().getTime.toString
           val put=new Put(rowkey.getBytes())
-          put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("value"), Bytes.toBytes(x.value()))
+
+          val vehicleId=responses.get("imei:864287034602894").get.get().get("vehicle_id")
+          val value=vehicleId+"_"+x.value()
+
+          put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("value"), Bytes.toBytes(value))
           puts.append(put)
           println("============:"+x.value())
         })
+
 
         if(puts.toList.size > 0){
           table.put(puts.toList)

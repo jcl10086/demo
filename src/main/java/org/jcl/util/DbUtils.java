@@ -7,6 +7,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 
 import java.io.FileInputStream;
 import java.util.Properties;
@@ -23,10 +24,21 @@ public class DbUtils {
         return jedis;
     }
 
+
+    /**
+     * 获取redis 管道Pipeline
+     * @return
+     */
+    public static Pipeline getPipeline(){
+        Jedis jedis=getJedis();
+        Pipeline pipeline=jedis.pipelined();
+        return pipeline;
+    }
+
     public static Properties getProps() throws Exception{
         Properties props = new Properties();
         //本地 data/config.properties
-        props.load(new FileInputStream("data/config.properties"));
+        props.load(new FileInputStream("config.properties"));
         return props;
     }
 
