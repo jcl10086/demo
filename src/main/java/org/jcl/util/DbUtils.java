@@ -10,6 +10,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
 
 import java.io.FileInputStream;
+import java.sql.DriverManager;
 import java.util.Properties;
 
 /**
@@ -57,6 +58,23 @@ public class DbUtils {
             conf.set("hbase.zookeeper.quorum", quorum);
             conf.set("hbase.zookeeper.property.clientPort", port);
             connection= ConnectionFactory.createConnection(conf);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return connection;
+    }
+
+    /**
+     * 获取jdbc连接
+     * @return
+     */
+    public static java.sql.Connection getJdbcConnection(){
+        java.sql.Connection connection=null;
+        try {
+            String url = "jdbc:mysql://app:3306/car_connectivity?"
+                    + "user=root&password=touchspring&useUnicode=true&characterEncoding=UTF8";
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(url);
         }catch (Exception e){
             e.printStackTrace();
         }
