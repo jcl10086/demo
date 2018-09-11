@@ -5,6 +5,7 @@ package org.jcl.core;/**
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
+import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.MD5Hash;
 import org.jcl.util.DbUtils;
@@ -28,9 +29,16 @@ public class HbaseSplit {
         List<String> vehicles=getVehicles();
 
         Admin admin=DbUtils.getHbaseConnection().getAdmin();
-        HTableDescriptor htd = new HTableDescriptor(TableName.valueOf("test"));
-        HColumnDescriptor hcd = new HColumnDescriptor("info".getBytes());
-        htd.addFamily(hcd);
+        HTableDescriptor htd = new HTableDescriptor(TableName.valueOf("ccu_data_hl"));
+        HColumnDescriptor hcdBase = new HColumnDescriptor("base_info".getBytes());
+        HColumnDescriptor hcdCollect = new HColumnDescriptor("collect_info".getBytes());
+        HColumnDescriptor hcdType = new HColumnDescriptor("type".getBytes());
+        hcdBase.setCompressionType(Compression.Algorithm.SNAPPY);
+        hcdCollect.setCompressionType(Compression.Algorithm.SNAPPY);
+        hcdType.setCompressionType(Compression.Algorithm.SNAPPY);
+        htd.addFamily(hcdBase);
+        htd.addFamily(hcdCollect);
+        htd.addFamily(hcdType);
 
         List<byte[]> list=vehicles.stream().map(x->(Bytes.toBytes(MD5Hash.getMD5AsHex(x.getBytes())))).collect(Collectors.toList());
 
