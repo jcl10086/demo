@@ -19,3 +19,6 @@
 ![image](https://github.com/jcl10086/demo/blob/master/src/main/resources/redis.png)
 
 数据批量插入hbase  spark-redis整合优雅的使用redis
+
+
+3.hbase预创建regoin并制定SNAPPY压缩

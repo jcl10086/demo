@@ -4,6 +4,8 @@ package org.jcl;/**
 
 import org.jcl.core.*;
 
+import java.io.IOException;
+
 /**
  * @author jichenglu
  * @create 2018-07-20 16:47
@@ -79,6 +81,15 @@ public class Application {
             String master=args[1];
 
             SparkStreamKafka.startJob(master);
+        }
+
+        //hbase预创建regoin  SNAPPY压缩
+        if("split".equals(args[0])){
+            try {
+                HbaseSplit.startJob();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  **/
 public class HbaseSplit {
 
-    public static void main(String[] args) throws IOException {
+    public static void startJob() throws IOException {
 
         List<String> vehicles=getVehicles();
 
