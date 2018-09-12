@@ -29,7 +29,7 @@ public class HbaseSplit {
         List<String> vehicles=getVehicles();
 
         Admin admin=DbUtils.getHbaseConnection().getAdmin();
-        HTableDescriptor htd = new HTableDescriptor(TableName.valueOf("ccu_data_hl"));
+        HTableDescriptor htd = new HTableDescriptor(TableName.valueOf("test"));
         HColumnDescriptor hcdBase = new HColumnDescriptor("base_info".getBytes());
         HColumnDescriptor hcdCollect = new HColumnDescriptor("collect_info".getBytes());
         HColumnDescriptor hcdType = new HColumnDescriptor("type".getBytes());
