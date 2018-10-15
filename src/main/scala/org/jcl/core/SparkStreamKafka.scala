@@ -124,8 +124,8 @@ object SparkStreamKafka {
         if(puts.toList.size > 0){
           table.put(puts.toList)
         }
-
-        table.close()
+       
+//         table.close()
 
       })
 
