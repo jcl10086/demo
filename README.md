@@ -20,5 +20,7 @@
 
 数据批量插入hbase  spark-redis整合优雅的使用redis
 
+yarn启动参数优化 --conf spark.streaming.backpressure.initialRate=10000  限制第一次批处理应该消费的数据，因为程序冷启动 队列里面有大量积压，防止第一次全部读取，造成系统阻塞
+
 
 3.split   hbase预创建regoin 使用SNAPPY压缩
