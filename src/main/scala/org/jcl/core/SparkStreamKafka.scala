@@ -18,6 +18,8 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable.ListBuffer
 import com.redislabs.provider.redis._
 
+import scala.util.Random
+
 
 /**
   * Created by admin on 2018/8/10.
@@ -89,61 +91,70 @@ object SparkStreamKafka {
     }
 
     stream.foreachRDD(rdd=>{
+      //过滤空批数据
+     if(!rdd.isEmpty()){
+       //一次性查出所有值
+       //      val keys=sc.fromRedisKeyPattern("imei:*").collect().toList
+       //
+       //      val mapData=keys.map(key=>{
+       //        (key,sc.fromRedisHash(key).collect().toMap)
+       //      }).toMap
 
-      //一次性查出所有值
-      val keys=sc.fromRedisKeyPattern("imei:*").collect().toList
+       val da=sc.fromRedisHash("data")
 
-      val mapData=keys.map(key=>{
-        (key,sc.fromRedisHash(key).collect().toMap)
-      }).toMap
-
-
-      //获取当前偏移量
-      val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
-
-      //业务处理
-      rdd.foreachPartition(recored=>{
-
-        val table=conn.getTable(TableName.valueOf("hello"))
-
-        val puts=ListBuffer[Put]()
-
-        recored.foreach(x=>{
-          val rowkey=new Date().getTime.toString
-          val put=new Put(rowkey.getBytes())
-
-          val vehicleId=mapData.get("imei:867154030090366").get.get("vehicle_id").get
-          val value=vehicleId+"_"+x.value()
-
-          put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("value"), Bytes.toBytes(value))
-          puts.append(put)
-          println("============:"+x.value())
-        })
+       val index=da.map(x=>{
+         (x._1.toString,x._2.toString)
+       }).collect().toMap.get("index").get.toInt
 
 
-        if(puts.toList.size > 0){
-          table.put(puts.toList)
-        }
-       
+       //获取当前偏移量
+       val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
+
+       //业务处理
+       rdd.foreachPartition(recored=>{
+
+         val table=conn.getTable(TableName.valueOf("hello"))
+
+         val puts=ListBuffer[Put]()
+
+         recored.foreach(x=>{
+           val rowkey=new Date().getTime.toString+new Random().nextInt(1000)
+           val put=new Put(rowkey.getBytes())
+
+
+           //          val vehicleId=mapData.get("imei:867154030090366").get.get("vehicle_id").get
+           //          val value=vehicleId+"_"+x.value()
+
+           put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("value"), Bytes.toBytes((x.value().toInt*index).toString))
+           puts.append(put)
+           println("============:"+x.value())
+         })
+
+
+         if(puts.toList.size > 0){
+           table.put(puts.toList)
+         }
+
 //         table.close()
 
-      })
+       })
 
-      val list=ListBuffer[(String,String)]()
+       val list=ListBuffer[(String,String)]()
 
 
-      val key="gt:"+groupId+"_"+topic
+       val key="gt:"+groupId+"_"+topic
 
-      //偏移量存储redis
-      for(of <- offsetRanges){
-//        val topic=of.topic
-        val partition=of.partition.toString
-        val offset=of.untilOffset.toString
-        list.append((partition,offset))
-//        jedis.hset(key,partition,offset)
-      }
-      val rsRDD=sc.parallelize(list)
-      sc.toRedisHASH(rsRDD,key)
+       //偏移量存储redis
+       for(of <- offsetRanges){
+         //        val topic=of.topic
+         val partition=of.partition.toString
+         val offset=of.untilOffset.toString
+         list.append((partition,offset))
+         //        jedis.hset(key,partition,offset)
+       }
+       val rsRDD=sc.parallelize(list)
+       sc.toRedisHASH(rsRDD,key)
+     }
 
     })
 
