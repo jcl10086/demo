@@ -24,3 +24,5 @@ yarn启动参数优化 --conf spark.streaming.backpressure.initialRate=400  限�
 
 
 3.split   hbase预创建regoin 使用SNAPPY压缩
+
+4.RedisUtils  懒加载redis连接池
