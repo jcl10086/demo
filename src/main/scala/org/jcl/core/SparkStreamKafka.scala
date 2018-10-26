@@ -57,7 +57,7 @@ object SparkStreamKafka {
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
       "group.id" -> groupId,
-      "auto.offset.reset" -> "earliest",
+      "auto.offset.reset" -> "smallest",
       "enable.auto.commit" -> (false: java.lang.Boolean)
     )
 
